@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wetflix</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Custom Styles */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #141414;
+        }
+
+        /* Custom scrollbar for horizontal rows */
+        .thumbnail-container::-webkit-scrollbar {
+            height: 8px;
+        }
+        .thumbnail-container::-webkit-scrollbar-thumb {
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+        }
+        .thumbnail-container::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .hero-gradient {
+            background-image: linear-gradient(to top, #141414, rgba(20, 20, 20, 0.7), rgba(20, 20, 20, 0));
+        }
+        .modal-bg-gradient {
+            background-image: linear-gradient(to top, rgba(20, 20, 20, 1) 10%, rgba(20, 20, 20, 0.7) 50%, rgba(20, 20, 20, 0) 100%);
+        }
+        .thumbnail {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .thumbnail:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+            z-index: 10;
+        }
+    </style>
+</head>
+<body class="text-white">
+
+    <!-- Main Container -->
+    <div id="main-container" class="w-full">
+        <!-- Header -->
+        <header class="fixed top-0 left-0 right-0 z-50 flex items-center justify-between p-4 md:p-6 bg-gradient-to-b from-black/80 to-transparent transition-all duration-300" id="navbar">
+            <h1 class="text-2xl md:text-3xl font-extrabold text-red-600 tracking-wider select-none">WETFLIX</h1>
+            <div class="flex items-center space-x-4">
+                <p class="hidden sm:block">Our Story</p>
+                <img src="https://placehold.co/40x40/FF0000/FFFFFF?text=L" alt="Profile" class="w-8 h-8 rounded-full cursor-pointer">
+            </div>
+        </header>
+
+        <!-- Hero Section -->
+        <main>
+            <section class="relative h-[60vh] md:h-[85vh] w-full flex items-end text-white">
+                <div class="absolute inset-0">
+                    <img src="ily.jpg" 
+                         id="hero-image"
+                         onerror="this.onerror=null;this.src='https://placehold.co/1920x1080/000000/FFFFFF?text=Romantic+Moment';"
+                         alt="Our Special Moment" class="w-full h-full object-cover transition-opacity duration-500 ease-in-out">
+                    <div class="absolute inset-0 hero-gradient"></div>
+                </div>
+                <div id="hero-content" class="relative z-10 p-6 md:p-12 lg:p-16 w-full md:w-2/3 lg:w-1/2">
+                    <h2 class="text-4xl md:text-6xl font-black mb-4 leading-tight tracking-wide">The Forever</h2>
+                    <p class="text-base md:text-lg mb-6 max-w-xl">
+                        A collection of moments, laughs, and dreams that built our beautiful story. This is a journey through the memories we've created and the future we're building together.
+                    </p>
+                    <a href="https://www.youtube.com/watch?v=vGJTaP6anOU" target="_blank" rel="noopener noreferrer" class="bg-white text-black font-bold py-2 px-6 rounded-lg flex items-center hover:bg-gray-200 transition-colors duration-300 w-fit">
+                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                        Play Our Song
+                    </a>
+                </div>
+            </section>
+
+            <!-- Categories Section -->
+            <div class="py-8 px-4 md:px-10 lg:px-16 space-y-10 -mt-10 md:-mt-20 relative z-20">
+                
+                <!-- Category Row 1: Favorite Moments -->
+                <section class="category-row">
+                    <h3 class="text-xl md:text-2xl font-bold mb-3">Our Favorite Moments</h3>
+                    <div class="thumbnail-container flex overflow-x-auto space-x-4 pb-4">
+                        <!-- Moment Cards will be dynamically inserted here -->
+                    </div>
+                </section>
+
+                <!-- Category Row 2: Reasons I Love You -->
+                <section class="category-row">
+                    <h3 class="text-xl md:text-2xl font-bold mb-3">Reasons I Love You</h3>
+                    <div class="thumbnail-container flex overflow-x-auto space-x-4 pb-4">
+                         <!-- Reason Cards will be dynamically inserted here -->
+                    </div>
+                </section>
+
+                <!-- Category Row 3: Our Future Adventures -->
+                <section class="category-row">
+                    <h3 class="text-xl md:text-2xl font-bold mb-3">Our Future Adventures</h3>
+                    <div class="thumbnail-container flex overflow-x-auto space-x-4 pb-4">
+                        <!-- Adventure Cards will be dynamically inserted here -->
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Romantic Lines Modal -->
+    <div id="romance-modal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-[60] hidden opacity-0 transition-opacity duration-300">
+        <div class="bg-red-600/10 backdrop-blur-md border border-red-500/30 rounded-lg p-8 m-4 max-w-md text-center shadow-2xl transform scale-95 transition-transform duration-300 relative">
+            <button id="close-romance-modal" class="absolute top-2 right-2 text-white/70 hover:text-white transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+            <p id="romance-text" class="text-xl md:text-2xl font-semibold italic text-white"></p>
+        </div>
+    </div>
+
+    <!-- Main Details Modal -->
+    <div id="modal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 hidden opacity-0 transition-opacity duration-300">
+        <div class="bg-[#181818] rounded-lg overflow-hidden w-11/12 md:w-3/4 lg:w-1/2 max-w-4xl shadow-2xl transform scale-95 transition-transform duration-300">
+            <div class="relative">
+                <img id="modal-image" src="ily.jpg" alt="Modal Image" class="w-full h-64 md:h-96 object-contain bg-black">
+                <div class="absolute inset-0 modal-bg-gradient pointer-events-none"></div>
+                <button id="close-modal" class="absolute top-4 right-4 bg-gray-800 rounded-full p-2 hover:bg-gray-700 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+                <div class="absolute bottom-0 left-0 p-6 md:p-8">
+                    <h2 id="modal-title" class="text-3xl md:text-4xl font-bold"></h2>
+                </div>
+            </div>
+            <div class="p-6 md:p-8">
+                <p id="modal-description" class="text-gray-300"></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const data = {
+                moments: [
+                    { id: 1, title: "Their Kids", img: "8.jpeg", description: "A love story where even stuffed toys become their kids sweet, simple and full of memories." },
+                    { id: 2, title: "Their First Pic", img: "fp.jpeg", description: "Their very first picture captures more than just a smile, it marks the start of something special. A simple moment that turned into forever memories." },
+                    { id: 3, title: "Their First Video Call", img: "vc.jpeg", description: "Their first video call after becoming a couple laughter, shy smiles, and endless talking. A simple moment that made distance feel small. The beginning of countless memories together."},
+                    { id: 4, title: "Marine Drive", img: "md.jpeg", description: "An evening at Marine Drive, just the two of them. Waves, lights, and simple smiles. A memory they’ll always cherish." },
+                    { id: 5, title: "Mandir and Ikea date", img: "ik.jpeg", description: "A day spent at the mandir and wandering through Ikea calm prayers, shared giggles and tiny ambitions. Holding hands and stealing smiles at every turn. Simple moments that turned into their favorite memory together." },
+                    { id: 6, title: "6 Months", img: "ani.jpeg", description: "Half a year together, filled with laughter, love and countless little moments. From playful chats to cozy hugs, every day felt special. Their six-month celebration captured all the joy they’ve shared, a simple, heartfelt reminder of how beautiful their journey has been." },
+                ],
+                reasons: [
+                    { id: 7, title: "Her Laughter", img: "5.jpeg", description: "Her laugh is contagious, bright, and the sweetest sound in the world. It turns the darkest days into light, pure music to his ears and the heart of every moment they share." },
+                    { id: 8, title: "Her Caring Nature", img: "3.jpeg", description: "She has the biggest heart of anyone he knows. The way she cares for others inspires him to be a better person every single day." },
+                    { id: 9, title: "How You Cuddle", img: "6.jpeg", description: "Fitting perfectly in between her arms feels like coming home his safe space, his comfort and his favorite place to be."},
+                    { id: 10, title: "Her Ambition", img: "am.jpeg", description: "He admires how she chases her dreams with passion and determination. It inspires him and makes him incredibly proud to be by her side." },
+                ],
+                adventures: [
+                    { id: 12, title: "See the Northern Lights", img: "nl.jpg", description: "He dreams of adventures with her, standing under the auroras, hand in hand, watching the sky sparkle and feeling the magic together. Every moment becomes a memory, a simple, sweet journey of love and dreams." },
+                    { id: 13, title: "December Coorg Plan", img: "coorg.jpg", description: "Planning a December trip to Coorg — misty hills, coffee plantations, and cozy mornings together. Hiking to waterfalls, wandering through trails, and discovering little hidden spots hand in hand. Every moment turning into a memory, every view feeling magical. A simple, sweet adventure full of love, laughter, and togetherness."},
+                    { id: 14, title: "Her Aahoe!", img: "kn.jpg", description: "Dreaming of future adventures together, cozy mornings, playful kisses, and mischievous smiles. Exploring new places, holding hands, and stealing little moments of fun. Every trip becomes a story, every laugh a memory. A flirty, romantic journey of love, laughter and endless adventures." },
+                    { id: 15, title: "Supporting her Dreams", img: "ted.png", description: "Supporting her dreams, cheering her on through every challenge and triumph. Being there for the late nights, the big plans and the small victories. Every step she takes feels sweeter when shared together. A love that inspires, uplifts, and grows stronger every day." },
+                ]
+            };
+
+            const categoryRows = document.querySelectorAll('.category-row');
+            const [momentsContainer, reasonsContainer, adventuresContainer] = [
+                categoryRows[0].querySelector('.thumbnail-container'),
+                categoryRows[1].querySelector('.thumbnail-container'),
+                categoryRows[2].querySelector('.thumbnail-container')
+            ];
+
+            const modal = document.getElementById('modal');
+            const closeModalBtn = document.getElementById('close-modal');
+            const modalImage = document.getElementById('modal-image');
+            const modalTitle = document.getElementById('modal-title');
+            const modalDescription = document.getElementById('modal-description');
+            
+            const romanceModal = document.getElementById('romance-modal');
+            const closeRomanceModalBtn = document.getElementById('close-romance-modal');
+            const romanceText = document.getElementById('romance-text');
+
+            // Hero section elements for dynamic update
+            const heroImage = document.getElementById('hero-image');
+            const heroContent = document.getElementById('hero-content');
+            const heroTitle = heroContent.querySelector('h2');
+            const heroDescription = heroContent.querySelector('p');
+            const heroPlayButton = heroContent.querySelector('a');
+
+            const originalHeroContent = {
+                imgSrc: heroImage.src,
+                title: heroTitle.textContent,
+                description: heroDescription.textContent
+            };
+            let revertTimeout;
+
+            const updateHero = (item) => {
+                clearTimeout(revertTimeout);
+                heroImage.style.opacity = '0';
+                setTimeout(() => {
+                    heroImage.src = item.img;
+                    heroTitle.textContent = item.title;
+                    heroDescription.textContent = item.description;
+                    heroPlayButton.style.display = 'none';
+                    heroImage.onload = () => { heroImage.style.opacity = '1'; };
+                    heroImage.onerror = () => { heroImage.src = originalHeroContent.imgSrc; heroImage.style.opacity = '1'; };
+                }, 400);
+            };
+
+            const revertHero = () => {
+                revertTimeout = setTimeout(() => {
+                    heroImage.style.opacity = '0';
+                    setTimeout(() => {
+                        heroImage.src = originalHeroContent.imgSrc;
+                        heroTitle.textContent = originalHeroContent.title;
+                        heroDescription.textContent = originalHeroContent.description;
+                        heroPlayButton.style.display = 'flex';
+                        heroImage.onload = () => { heroImage.style.opacity = '1'; };
+                    }, 400);
+                }, 300);
+            };
+
+
+            const romanticLines = [
+                "Are you a parking ticket? Because you've got 'fine' written all over you.",
+                "If you were a vegetable, you'd be a 'cute-cumber.'",
+                "Do you believe in love at first sight—or should I walk by again?",
+                "I'm not a photographer, but I can picture us together.",
+                "Aside from being gorgeous, what do you do for a living?",
+                "Your hand looks heavy—can I hold it for you?",
+                "If being sexy was a crime, you'd be guilty as charged.",
+                "I must be a snowflake, because I've fallen for you.",
+                "Are you from Tennessee? Because you're the only ten I see!",
+                "My love for you is like a fractal - it goes on forever."
+            ];
+
+            // Function to create a thumbnail card
+            const createThumbnail = (item) => {
+                const card = document.createElement('div');
+                card.className = 'thumbnail group flex-shrink-0 w-60 md:w-72 bg-gray-900 rounded-lg overflow-hidden cursor-pointer';
+                card.innerHTML = `
+                    <div class="relative overflow-hidden aspect-video bg-black">
+                        <img src="${item.img}" 
+                             onerror="this.onerror=null;this.src='https://placehold.co/288x162/FF0000/FFFFFF?text=Memory';"
+                             alt="${item.title}" class="absolute top-0 left-0 w-full h-full object-contain transition-transform duration-300 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                            <button class="play-romance-button text-white bg-black/50 rounded-full p-3 hover:bg-red-600 transition-colors z-10">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="ml-1"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="p-3">
+                        <h4 class="font-semibold truncate">${item.title}</h4>
+                    </div>
+                `;
+                card.addEventListener('click', () => openModal(item));
+                card.addEventListener('mouseenter', () => updateHero(item));
+
+                const playButton = card.querySelector('.play-romance-button');
+                playButton.addEventListener('click', (e) => {
+                    e.stopPropagation(); // Prevents the main modal from opening
+                    openRomanceModal();
+                });
+
+                return card;
+            };
+            
+            // Populate rows
+            data.moments.forEach(item => momentsContainer.appendChild(createThumbnail(item)));
+            data.reasons.forEach(item => reasonsContainer.appendChild(createThumbnail(item)));
+            data.adventures.forEach(item => adventuresContainer.appendChild(createThumbnail(item)));
+
+            document.querySelectorAll('.thumbnail-container').forEach(container => {
+                container.addEventListener('mouseleave', revertHero);
+            });
+
+            // Main Modal functionality
+            const openModal = (item) => {
+                modalImage.src = item.img;
+                modalImage.onerror = () => { modalImage.src = 'https://placehold.co/1280x720/000000/FFFFFF?text=Our+Memory'; };
+                modalTitle.textContent = item.title;
+                modalDescription.textContent = item.description;
+                modal.classList.remove('hidden');
+                setTimeout(() => {
+                    modal.classList.remove('opacity-0');
+                    modal.querySelector('div').classList.remove('scale-95');
+                }, 10);
+                document.body.style.overflow = 'hidden';
+            };
+
+            const closeModal = () => {
+                modal.classList.add('opacity-0');
+                modal.querySelector('div').classList.add('scale-95');
+                setTimeout(() => {
+                    modal.classList.add('hidden');
+                     if (romanceModal.classList.contains('hidden')) {
+                        document.body.style.overflow = 'auto';
+                    }
+                }, 300);
+            };
+
+            closeModalBtn.addEventListener('click', closeModal);
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    closeModal();
+                }
+            });
+
+            // Romance Modal Functionality
+            const openRomanceModal = () => {
+                const randomLine = romanticLines[Math.floor(Math.random() * romanticLines.length)];
+                romanceText.textContent = `"${randomLine}"`;
+                romanceModal.classList.remove('hidden');
+                setTimeout(() => {
+                    romanceModal.classList.remove('opacity-0');
+                    romanceModal.querySelector('div').classList.remove('scale-95');
+                }, 10);
+                document.body.style.overflow = 'hidden';
+            };
+
+            const closeRomanceModal = () => {
+                romanceModal.classList.add('opacity-0');
+                romanceModal.querySelector('div').classList.add('scale-95');
+                setTimeout(() => {
+                    romanceModal.classList.add('hidden');
+                    if (modal.classList.contains('hidden')) {
+                        document.body.style.overflow = 'auto';
+                    }
+                }, 300);
+            };
+
+            closeRomanceModalBtn.addEventListener('click', closeRomanceModal);
+            romanceModal.addEventListener('click', (e) => {
+                if (e.target === romanceModal) {
+                    closeRomanceModal();
+                }
+            });
+
+            // Close modals with Escape key
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    if (!romanceModal.classList.contains('hidden')) {
+                        closeRomanceModal();
+                    } else if (!modal.classList.contains('hidden')) {
+                        closeModal();
+                    }
+                }
+            });
+
+            // Navbar scroll effect
+            const navbar = document.getElementById('navbar');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    navbar.classList.add('bg-[#141414]');
+                } else {
+                    navbar.classList.remove('bg-[#141414]');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
+
